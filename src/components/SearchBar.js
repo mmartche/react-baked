@@ -9,11 +9,16 @@ import debounce from 'lodash.debounce';
 class SearchBar extends React.Component {
     static propTypes = {
         searchDeals: PropTypes.func.isRequired,
+        initialSearchTerm: PropTypes.string.isRequired,
     };
     state = {
-        searchTerm: '',
+        searchTerm: this.props.initialSearchTerm,
     };
-    debounceSearchDeals = debounce(this.props.searchDeals, 300);
+    searchDeals = (searchTerm) => {
+        this.props.searchDeals(searchTerm);
+        this.inputElement.blur();
+    }
+    debounceSearchDeals = debounce(this.searchDeals, 300);
     handleChange = (searchTerm) => {
         this.setState({ searchTerm }, () => {
             this.debounceSearchDeals(this.state.searchTerm);
@@ -21,6 +26,8 @@ class SearchBar extends React.Component {
     };
     render() {
         return <TextInput 
+            ref={(inputElement) => { this.inputElement = inputElement; }}
+            value={this.state.searchTerm}
             placeholder='Search all' 
             style={styles.input} 
             onChangeText={this.handleChange} 

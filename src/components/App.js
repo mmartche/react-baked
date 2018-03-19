@@ -2,7 +2,10 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  Animated,
+  Dimensions,
+  Easing
 } from 'react-native';
 import ajax from '../Ajax';
 import DealList from './DealList';
@@ -10,12 +13,28 @@ import DealDetail from './DealDetail';
 import SearchBar from './SearchBar';
 
 class App extends React.Component {
+    titleXPos = new Animated.Value(0);
     state = {
         deals: [],
         dealsFormSearch: [],
         currentDealId: null,
+        activeSearchTerm: '',
+    }
+    animateTitle = (direction = 1) => {
+        const width = Dimensions.get('window').width - 150;
+        Animated.timing(
+            this.titleXPos,
+            {   toValue: direction * (width / 2), 
+                duration: 1000, 
+                easing: Easing.ease, 
+            }).start(({ finished }) => {
+                if (finished) {
+                    this.animateTitle(-1 * direction);
+                }
+        });
     }
     async componentDidMount() {
+        this.animateTitle();
         const deals = await ajax.fetchInitialDeals();
         this.setState({ deals });
     }
@@ -24,7 +43,10 @@ class App extends React.Component {
         if (searchTerm) {
             dealsFormSearch = await ajax.fetchDealSearchTerm(searchTerm);
         }
-        this.setState({ dealsFormSearch });
+        this.setState({ 
+            dealsFormSearch,
+            activeSearchTerm: searchTerm,
+         });
     };
     setCurrentDeal = (dealId) => {
         this.setState({
@@ -56,15 +78,15 @@ class App extends React.Component {
         if (dealsToDisplay.length > 0) {
             return (
                 <View>
-                    <SearchBar searchDeals={this.searchDeals} />
+                    <SearchBar searchDeals={this.searchDeals} initialSearchTerm={this.state.activeSearchTerm} />
                     <DealList deals={dealsToDisplay} onItemPress={this.setCurrentDeal}  />
                 </View>
             );
         }
         return (
-            <View style={styles.container}>
+            <Animated.View style={[{ left: this.titleXPos }, styles.container]}>
                 <Text style={styles.header}>espera ai</Text>
-            </View>
+            </Animated.View>
         );
     }
 }
