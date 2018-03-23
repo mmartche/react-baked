@@ -11,6 +11,7 @@ import ajax from '../Ajax';
 import DealList from './DealList';
 import DealDetail from './DealDetail';
 import SearchBar from './SearchBar';
+import Header from './Header';
 
 class App extends React.Component {
     titleXPos = new Animated.Value(0);
@@ -67,6 +68,7 @@ class App extends React.Component {
         if (this.state.currentDealId) {
             return (
                 <View>
+                    <Header actualPage={'DealDetail'} />
                     <DealDetail initialDealData={this.currentDeal()} onBack={this.unsetCurrentDeal} />
                 </View>
             );
@@ -78,6 +80,7 @@ class App extends React.Component {
         if (dealsToDisplay.length > 0) {
             return (
                 <View>
+                    <Header actualPage={'Homel'} />
                     <SearchBar searchDeals={this.searchDeals} initialSearchTerm={this.state.activeSearchTerm} />
                     <DealList deals={dealsToDisplay} onItemPress={this.setCurrentDeal}  />
                 </View>
@@ -85,7 +88,7 @@ class App extends React.Component {
         }
         return (
             <Animated.View style={[{ left: this.titleXPos }, styles.container]}>
-                <Text style={styles.header}>espera ai</Text>
+                <Text style={styles.welcome}>espera ai</Text>
             </Animated.View>
         );
     }
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    header: {
+    welcome: {
         fontSize:40,
     }
 });

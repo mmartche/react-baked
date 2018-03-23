@@ -1,10 +1,12 @@
 import React from 'react';
 import {
   StyleSheet,
-  TextInput
+  TextInput,
+  View
 } from 'react-native';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import { TextField } from 'react-native-material-textfield';
 
 class SearchBar extends React.Component {
     static propTypes = {
@@ -13,10 +15,11 @@ class SearchBar extends React.Component {
     };
     state = {
         searchTerm: this.props.initialSearchTerm,
+        phone: '',
     };
     searchDeals = (searchTerm) => {
         this.props.searchDeals(searchTerm);
-        this.inputElement.blur();
+        // this.inputElement.blur();
     }
     debounceSearchDeals = debounce(this.searchDeals, 300);
     handleChange = (searchTerm) => {
@@ -25,13 +28,22 @@ class SearchBar extends React.Component {
         });
     };
     render() {
-        return <TextInput 
-            ref={(inputElement) => { this.inputElement = inputElement; }}
-            value={this.state.searchTerm}
-            placeholder='Search all' 
-            style={styles.input} 
-            onChangeText={this.handleChange} 
-        />
+        return (
+        <View>
+            {/* <TextInput 
+                ref={(inputElement) => { this.inputElement = inputElement; }}
+                value={this.state.searchTerm}
+                placeholder='Search all' 
+                style={styles.input} 
+                onChangeText={this.handleChange} 
+            /> */}
+            <TextField
+                label='searchterm new'
+                value={this.state.searchTerm}
+                onChangeText={this.handleChange} 
+                />
+        </View>
+        )
     }
 }
 
