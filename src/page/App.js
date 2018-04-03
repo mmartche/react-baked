@@ -3,6 +3,7 @@ import {
   Text,
   View,
   Button,
+  AsyncStorage,
 } from 'react-native';
 import ajax from '../Ajax';
 // import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +11,7 @@ import { TabNavigator, StackNavigator, TabBarBottom  } from 'react-navigation';
 import HomeScreen from './Home';
 import DetailsScreen from './Details';
 import SettingsScreen from './Settings';
+import FormScreen from './Form';
 
 const HomeStack = StackNavigator({
     Home: { screen: HomeScreen },
@@ -24,6 +26,7 @@ const SettingsStack = StackNavigator({
 export default TabNavigator({
     Home: { screen: HomeStack },
     Settings: { screen: SettingsStack },
+    Form: { screen: FormScreen },
 },
 {
     navigationOptions: ({ navigation }) => ({
